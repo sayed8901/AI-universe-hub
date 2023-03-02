@@ -1,19 +1,34 @@
 // fetching the ai universe url to get data from it.
-const loadData = async() => {
+const loadData = async(dataLimit) => {
     const url = `https://openapi.programming-hero.com/api/ai/tools`;
     try{
         const res = await fetch(url);
         const data = await res.json();
-        displayData(data.data.tools);
+        displayData(data.data.tools, dataLimit);
     }
     catch(error){
         console.log(error);
     }
 }
 
-const displayData = data => {
-    console.log(data);
+// display info in the cards
+const displayData = (data, dataLimit) => {
+    // console.log(data);
     const cardContainer = document.getElementById('card-container');
+
+    // to display first 6 cards only
+    const showAll = document.getElementById('show-all');
+    if(data.length > dataLimit){
+        data= data.slice(0, dataLimit);
+        // to make visible 'see more' button
+        showAll.classList.remove('d-none');
+    }
+    else{
+        cardContainer.innerHTML = '';
+        showAll.classList.add('d-none');
+    }
+
+    // dynamically adding info to each card
     data.forEach(card => {
         const {name, image, features, published_in} = card;
         const cardDiv = document.createElement('div');
@@ -47,4 +62,11 @@ const displayData = data => {
 
 
 
-loadData()
+// to set how many cards want to display at first load
+loadData(6);
+
+
+// to show all by clicking on 'see more' button
+document.getElementById('btn-show-all').addEventListener('click', function(){
+    loadData();
+})
