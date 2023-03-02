@@ -1,19 +1,33 @@
-// fetching the ai universe url to get data from it.
-const loadData = async(dataLimit) => {
-    const url = `https://openapi.programming-hero.com/api/ai/tools`;
-    try{
-        const res = await fetch(url);
-        const data = await res.json();
-        displayData(data.data.tools, dataLimit);
+document.getElementById('sort-result-by-latest-date').addEventListener('click', function(){
+    // fetching the ai universe url to get data from it.
+    const loadData = async(dataLimit) => {
+        const url = `https://openapi.programming-hero.com/api/ai/tools`;
+        try{
+            const res = await fetch(url);
+            const data = await res.json();
+            displayData(data.data.tools, dataLimit);
+        }
+        catch(error){
+            console.log(error);
+        }
     }
-    catch(error){
-        console.log(error);
-    }
-}
+
+    // to set how many cards want to display at first load
+    loadData(2);
+    // spinner starts
+    toggleSpinner(true);
+
+    // to show all by clicking on 'see more' button
+    document.getElementById('btn-show-all').addEventListener('click', function(){
+        loadData();
+        // spinner starts
+        toggleSpinner(true);
+    })
+})
 
 // display info in the cards
-const displayData = (data, dataLimit) => {
-    // console.log(data);
+const displayData = (data, dataLimit) => {    
+    // to get the container
     const cardContainer = document.getElementById('card-container');
 
     // to display first 6 cards only
@@ -21,6 +35,7 @@ const displayData = (data, dataLimit) => {
     if(data.length > dataLimit){
         data= data.slice(0, dataLimit);
         // to make visible 'see more' button
+        cardContainer.innerHTML = '';
         showAll.classList.remove('d-none');
     }
     else{
@@ -56,17 +71,21 @@ const displayData = (data, dataLimit) => {
                 </div>
             </div>
         `;
+        // adding each card to its parent container
         cardContainer.appendChild(cardDiv);
+
+        // spinner ends
+        toggleSpinner(false);
     });
 }
 
-
-
-// to set how many cards want to display at first load
-loadData(6);
-
-
-// to show all by clicking on 'see more' button
-document.getElementById('btn-show-all').addEventListener('click', function(){
-    loadData();
-})
+// spinner loading function
+const toggleSpinner = isLoading => {
+    const spinner = document.getElementById('spinner');
+    if(isLoading){
+        spinner.classList.remove('d-none');
+    }
+    else{
+        spinner.classList.add('d-none');
+    }
+}
