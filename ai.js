@@ -5,6 +5,7 @@ const loadData = async(dataLimit) => {
         const res = await fetch(url);
         const data = await res.json();
         displayData(data.data.tools, dataLimit);
+        // console.log(data.data.tools);
     }
     catch(error){
         console.log(error);
@@ -32,7 +33,7 @@ const displayData = (data, dataLimit) => {
 
     // dynamically adding info to each card
     data.forEach(card => {
-        const {name, image, features, published_in} = card;
+        const {id, name, image, features, published_in} = card;
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('col');
         cardDiv.innerHTML = `
@@ -52,7 +53,9 @@ const displayData = (data, dataLimit) => {
                         <i class="fa-regular fa-calendar-check"></i>
                         <small>${published_in}</small>
                     </div>
-                    <button class="border-0 bg-danger-subtle rounded-circle text-danger" style="width: 50px; height: 50px;">
+                    <button class="border-0 bg-danger-subtle rounded-circle text-danger" style="width: 50px; height: 50px;"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    onclick="loadDetails('${id}')">
                         <i class="text-center fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -66,6 +69,88 @@ const displayData = (data, dataLimit) => {
     });
 }
 
+// fetching the url by individual id to get data from the it.
+const loadDetails = async(id) => {
+    const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
+    try{
+        const res = await fetch(url);
+        const data = await res.json();
+        displayDetails(data.data);
+        // console.log(data.data);
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+
+const displayDetails = serviceId => {
+    const {description, image_link, features, integrations, pricing, } = serviceId;
+
+    const modalContainer = document.getElementById('modal-container');
+    modalContainer.innerHTML = '';
+
+    const modalDiv = document.createElement('div');
+    modalDiv.classList.add('row', 'row-cols-1', 'row-cols-md-2', 'g-4');
+
+    modalDiv.innerHTML = `
+        <div class="col">
+            <div class="card bg-danger-subtle border border-danger rounded-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        ${description ? description : 'More details area coming soon!'}
+                    </h5>
+                    <div class="d-flex gap-2 my-4 justify-content-center align-items-center text-center">
+                        <div class="bg-white rounded-3 text-success fw-bold py-3 px-2">
+                            <small class="p-0 m-0"> 
+                                ${pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost/' : pricing[0].price}
+                                Basic
+                            </small>
+                        </div>
+                        <div class="bg-white rounded-3 text-warning fw-bold py-3 px-2">
+                            <small class="p-0 m-0"> 
+                                ${pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost/' : pricing[1].price}
+                                Pro
+                            </small>
+                        </div>
+                        <div class="bg-white rounded-3 text-danger fw-bold py-3 px-2">
+                            <small class="p-0 m-0"> 
+                                ${pricing[2].price == '0' || pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'? 'free of cost/' : pricing[2].price}
+                                Enterprise
+                            </small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-4">
+                        <div class="d-flex flex-column">
+                            <h5 class="fw-bold">Features</h5>
+                            <small class="p-0 m-0">* ${features[1].feature_name}</small>
+                            <small class="p-0 m-0">* ${features[2].feature_name}</small>
+                            <small>* ${features[3].feature_name}</small>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <h5 class="fw-bold">Integrations</h5>
+                            <small class="p-0 m-0">* ${integrations[0]}</small>
+                            <small class="p-0 m-0">* ${integrations[1]}</small>
+                            <small>* ${integrations[2]}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card rounded-3">
+                <img src="${image_link[0] ? image_link[0] : image_link[1]}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                    additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+    `;
+    modalContainer.appendChild(modalDiv);
+}
 
 // spinner loading function
 const toggleSpinner = isLoading => {
@@ -124,7 +209,6 @@ document.getElementById('sort-result-by-latest-date').addEventListener('click', 
     // soring the original url array using the above mentioned function
     const sort = (url, dataLimit) => {
         const sortedUrl = url.sort(customSort);
-        console.log(sortedUrl);
         displayData(sortedUrl, dataLimit);
     }
 
