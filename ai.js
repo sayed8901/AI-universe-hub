@@ -5,7 +5,6 @@ const loadData = async(dataLimit) => {
         const res = await fetch(url);
         const data = await res.json();
         displayData(data.data.tools, dataLimit);
-        // console.log(data.data.tools);
     }
     catch(error){
         console.log(error);
@@ -41,11 +40,13 @@ const displayData = (data, dataLimit) => {
                 <img src="${image}" class="card-img-top rounded-3" alt="...">
                 <div class="card-body px-0">
                     <h5 class="card-title fw-bold">Features</h5>
+
                     <div class="d-flex flex-column">
                         <small class="p-0 m-0">1. ${features[0]}</small>
                         <small class="p-0 m-0">2. ${features[1]}</small>
                         <small >3. ${features[2]}</small>
                     </div>
+                    
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                     <div>
@@ -84,6 +85,7 @@ const loadDetails = async(id) => {
 }
 
 
+// display details onto the modal
 const displayDetails = serviceId => {
     const {description, image_link, features, integrations, pricing, input_output_examples, accuracy} = serviceId;
 
@@ -157,7 +159,7 @@ const toggleSpinner = isLoading => {
 }
 
 
-// to set how many cards want to display at first load
+// to set how many cards want to display at first load initially or on reload
 loadData(6);
 // spinner starts
 toggleSpinner(true);
@@ -168,9 +170,6 @@ document.getElementById('btn-show-all').addEventListener('click', function(){
     // spinner starts
     toggleSpinner(true);
 })
-
-
-
 
 
 
