@@ -85,13 +85,13 @@ const loadDetails = async(id) => {
 
 
 const displayDetails = serviceId => {
-    const {description, image_link, features, integrations, pricing, } = serviceId;
+    const {description, image_link, features, integrations, pricing, input_output_examples, accuracy} = serviceId;
 
     const modalContainer = document.getElementById('modal-container');
     modalContainer.innerHTML = '';
 
     const modalDiv = document.createElement('div');
-    modalDiv.classList.add('row', 'row-cols-1', 'row-cols-md-2', 'g-4');
+    modalDiv.classList.add('row', 'row-cols-1', 'row-cols-lg-2', 'g-3');
 
     modalDiv.innerHTML = `
         <div class="col">
@@ -120,7 +120,7 @@ const displayDetails = serviceId => {
                             </small>
                         </div>
                     </div>
-                    <div class="d-flex gap-4">
+                    <div class="d-flex justify-content-center gap-4">
                         <div class="d-flex flex-column">
                             <h5 class="fw-bold">Features</h5>
                             <small class="p-0 m-0">* ${features[1].feature_name}</small>
@@ -139,12 +139,21 @@ const displayDetails = serviceId => {
         </div>
         
         <div class="col">
-            <div class="card rounded-3">
-                <img src="${image_link[0] ? image_link[0] : image_link[1]}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                    additional content. This content is a little bit longer.</p>
+            <div class="card rounded-3 p-3">
+                <div class="position-relative">
+                    <img src="${image_link[0] ? image_link[0] : image_link[1]}" class="card-img-top rounded-3" alt="...">
+                    <button class="btn btn-danger btn-sm position-absolute" style="top:10px; right: 10px"> 
+                        ${accuracy.score ? accuracy.score*100 +'%' : 'No data available regarding'}
+                        Accuracy
+                    </button>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold my-3">
+                        ${input_output_examples[0].input ? input_output_examples[0].input : 'Can you give any example?'}
+                    </h5>
+                    <p class="card-text">
+                        ${input_output_examples[0].output ? input_output_examples[0].output : 'No! Nit yet! Take a break!!!'}
+                    </p>
                 </div>
             </div>
         </div>
