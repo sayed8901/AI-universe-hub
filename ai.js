@@ -87,78 +87,62 @@ const loadDetails = async(id) => {
 const displayDetails = serviceId => {
     const {description, image_link, features, integrations, pricing, input_output_examples, accuracy} = serviceId;
 
-    const modalContainer = document.getElementById('modal-container');
-    modalContainer.innerHTML = '';
-
-    const modalDiv = document.createElement('div');
-    modalDiv.classList.add('row', 'row-cols-1', 'row-cols-lg-2', 'g-3');
-
-    modalDiv.innerHTML = `
-        <div class="col">
-            <div class="card bg-danger-subtle border border-danger rounded-3">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">
-                        ${description ? description : 'More details area coming soon!'}
-                    </h5>
-                    <div class="d-flex gap-2 my-4 justify-content-center align-items-center text-center">
-                        <div class="bg-white rounded-3 text-success fw-bold py-3 px-2">
-                            <small class="p-0 m-0"> 
-                                ${pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost/' : pricing[0].price}
-                                Basic
-                            </small>
-                        </div>
-                        <div class="bg-white rounded-3 text-warning fw-bold py-3 px-2">
-                            <small class="p-0 m-0"> 
-                                ${pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost/' : pricing[1].price}
-                                Pro
-                            </small>
-                        </div>
-                        <div class="bg-white rounded-3 text-danger fw-bold py-3 px-2">
-                            <small class="p-0 m-0"> 
-                                ${pricing[2].price == '0' || pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'? 'free of cost/' : pricing[2].price}
-                                Enterprise
-                            </small>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-center gap-4">
-                        <div class="d-flex flex-column">
-                            <h5 class="fw-bold">Features</h5>
-                            <small class="p-0 m-0">* ${features[1].feature_name}</small>
-                            <small class="p-0 m-0">* ${features[2].feature_name}</small>
-                            <small>* ${features[3].feature_name}</small>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <h5 class="fw-bold">Integrations</h5>
-                            <small class="p-0 m-0">* ${integrations[0]}</small>
-                            <small class="p-0 m-0">* ${integrations[1]}</small>
-                            <small>* ${integrations[2]}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col">
-            <div class="card rounded-3 p-3">
-                <div class="position-relative">
-                    <img src="${image_link[0] ? image_link[0] : image_link[1]}" class="card-img-top rounded-3" alt="...">
-                    <button class="btn btn-danger btn-sm position-absolute" style="top:10px; right: 10px"> 
-                        ${accuracy.score ? accuracy.score*100 +'%' : 'No data available regarding'}
-                        Accuracy
-                    </button>
-                </div>
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold my-3">
-                        ${input_output_examples[0].input ? input_output_examples[0].input : 'Can you give any example?'}
-                    </h5>
-                    <p class="card-text">
-                        ${input_output_examples[0].output ? input_output_examples[0].output : 'No! Nit yet! Take a break!!!'}
-                    </p>
-                </div>
-            </div>
-        </div>
+    // description
+    document.getElementById('description').innerText = `
+        ${description ? description : 'More details area coming soon!'}
     `;
-    modalContainer.appendChild(modalDiv);
+
+    // price
+    document.getElementById('basic-price').innerText =
+        `${pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost/' : pricing[0].price} 
+        basic`;
+    document.getElementById('pro-price').innerText = 
+        `${pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost/' : pricing[1].price}
+        Pro`;
+    document.getElementById('enterprise-price').innerText = 
+        `${pricing[2].price == '0' || pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'? 'free of cost/' : pricing[2].price}
+        Enterprise`;
+
+    // features
+    const featuresContainer = document.getElementById('features');
+    featuresContainer.innerHTML = '';
+    for(const feature in features){
+        const featureItem = document.createElement('small');
+        featureItem.innerText = `
+            * ${features[feature].feature_name ? features[feature].feature_name : 'No data found'}
+        `;
+        featuresContainer.appendChild(featureItem);
+    }
+
+    // integrations
+    const integrationsContainer = document.getElementById('integrations');
+    integrationsContainer.innerHTML = '';
+    for(const integration of integrations){
+        const integrationItem = document.createElement('small');
+        integrationItem.innerText = `
+            * ${integration ? integration : 'No data found'}
+        `;
+        integrationsContainer.appendChild(integrationItem);
+    }
+
+    // modal image
+    document.getElementById('modal-img').setAttribute('src',`${image_link[0] ? image_link[0] : image_link[1]}`);
+
+    // accuracy notification
+    const accuracyField = document.getElementById('accuracy');
+    accuracyField.classList.remove('d-none');
+    accuracyField.innerHTML = `
+        ${accuracy.score ? accuracy.score*100 +'% accuracy' : 
+        accuracyField.classList.add('d-none')}
+    `;
+
+    // example part
+    document.getElementById('example-question').innerText = `
+        ${input_output_examples[0].input ? input_output_examples[0].input : 'Can you give any example?'}
+    `;
+    document.getElementById('example-answer').innerText = `
+        ${input_output_examples[0].output ? input_output_examples[0].output : 'Can you give any example?'}
+    `;
 }
 
 // spinner loading function
