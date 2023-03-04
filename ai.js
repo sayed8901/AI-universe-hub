@@ -110,11 +110,9 @@ const displayDetails = serviceId => {
     const enterprisePrice = document.getElementById('enterprise-price');
 
     basicPrice.innerText =
-        `${pricing == null || pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost' : pricing[0].price} 
-        basic`;
+        `${pricing == null || pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost' : pricing[0].price} basic`;
     proPrice.innerText = 
-        `${pricing == null || pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost' : pricing[1].price}
-        Pro`;
+        `${pricing == null || pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost' : pricing[1].price} Pro`;
     
     if(pricing == null || pricing[2].price == '0'){
         enterprisePrice.innerText = 'free of cost/ Enterprise';
@@ -211,7 +209,6 @@ document.getElementById('btn-show-all').addEventListener('click', function(){
     // spinner starts
     toggleSpinner(true);
 })
-
 
 
 
