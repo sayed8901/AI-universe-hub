@@ -105,15 +105,28 @@ const displayDetails = serviceId => {
     `;
 
     // price
-    document.getElementById('basic-price').innerText =
-        `${pricing == null|| pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost/' : pricing[0].price} 
+    const basicPrice = document.getElementById('basic-price');
+    const proPrice = document.getElementById('pro-price');
+    const enterprisePrice = document.getElementById('enterprise-price');
+
+    basicPrice.innerText =
+        `${pricing == null || pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost' : pricing[0].price} 
         basic`;
-    document.getElementById('pro-price').innerText = 
-        `${pricing == null|| pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost/' : pricing[1].price}
+    proPrice.innerText = 
+        `${pricing == null || pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost' : pricing[1].price}
         Pro`;
-    document.getElementById('enterprise-price').innerText = 
-        `${pricing == null|| pricing[2].price == '0' || pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'? 'free of cost/' : pricing[2].price}
+    
+    if(pricing == null || pricing[2].price == '0'){
+        enterprisePrice.innerText = 'free of cost/ Enterprise';
+    }
+    else if(pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'){
+        enterprisePrice.innerText = `Contact for Enterprise pricing`;
+    }
+    else{
+        enterprisePrice.innerText = 
+        `${pricing[2].price}
         Enterprise`;
+    }
 
     // features
     const featuresContainer = document.getElementById('features');
@@ -136,13 +149,14 @@ const displayDetails = serviceId => {
                 * ${integration ? integration : 'No data found'}
             `;
             integrationsContainer.appendChild(integrationItem);
+            integrationsContainer.classList.remove('my-3');
         }
     }
     else{
         const integrationItem = document.createElement('small');
             integrationItem.innerText = `No data found`;
             integrationsContainer.appendChild(integrationItem);
-            // integrationsContainer.classList.add('my-3');
+            integrationsContainer.classList.add('my-3');
     }
 
     // modal image
