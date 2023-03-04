@@ -106,13 +106,13 @@ const displayDetails = serviceId => {
 
     // price
     document.getElementById('basic-price').innerText =
-        `${pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost/' : pricing[0].price} 
+        `${pricing == null|| pricing[0].price == '0' || pricing[0].price == 'No cost' ? 'free of cost/' : pricing[0].price} 
         basic`;
     document.getElementById('pro-price').innerText = 
-        `${pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost/' : pricing[1].price}
+        `${pricing == null|| pricing[1].price == '0' || pricing[1].price == 'No cost' ? 'free of cost/' : pricing[1].price}
         Pro`;
     document.getElementById('enterprise-price').innerText = 
-        `${pricing[2].price == '0' || pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'? 'free of cost/' : pricing[2].price}
+        `${pricing == null|| pricing[2].price == '0' || pricing[2].price == 'Contact us ' || pricing[2].price == 'Contact us for pricing'? 'free of cost/' : pricing[2].price}
         Enterprise`;
 
     // features
@@ -129,12 +129,20 @@ const displayDetails = serviceId => {
     // integrations
     const integrationsContainer = document.getElementById('integrations');
     integrationsContainer.innerHTML = '';
-    for(const integration of integrations){
+    if(integrations !== null){
+        for(const integration of integrations){
+            const integrationItem = document.createElement('small');
+            integrationItem.innerText = `
+                * ${integration ? integration : 'No data found'}
+            `;
+            integrationsContainer.appendChild(integrationItem);
+        }
+    }
+    else{
         const integrationItem = document.createElement('small');
-        integrationItem.innerText = `
-            * ${integration ? integration : 'No data found'}
-        `;
-        integrationsContainer.appendChild(integrationItem);
+            integrationItem.innerText = `No data found`;
+            integrationsContainer.appendChild(integrationItem);
+            // integrationsContainer.classList.add('my-3');
     }
 
     // modal image
@@ -149,12 +157,21 @@ const displayDetails = serviceId => {
     `;
 
     // example part
-    document.getElementById('example-question').innerText = `
-        ${input_output_examples[0].input ? input_output_examples[0].input : 'Can you give any example?'}
-    `;
-    document.getElementById('example-answer').innerText = `
-        ${input_output_examples[0].output ? input_output_examples[0].output : 'Can you give any example?'}
-    `;
+    const exampleQuestion = document.getElementById('example-question');
+    const exampleAnswer = document.getElementById('example-answer');
+
+    if(input_output_examples !== null){
+        exampleQuestion.innerText = `
+            ${input_output_examples[0].input ? input_output_examples[0].input : 'Can you give any example?'}
+        `;
+        exampleAnswer.innerText = `
+            ${input_output_examples[0].output ? input_output_examples[0].output : 'No! Not Yet! Take a break!!!'}
+        `;
+    }
+    else{
+        exampleQuestion.innerText = `Can you give any example?`;
+        exampleAnswer.innerText = `No! Not Yet! Take a break!!!`;
+    }
 }
 
 // spinner loading function
