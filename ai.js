@@ -33,8 +33,11 @@ const displayData = (data, dataLimit) => {
     // dynamically adding info to each card
     data.forEach(card => {
         const {id, name, image, features, published_in} = card;
+
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('col');
+
+        // creating inner HTML for each card
         cardDiv.innerHTML = `
             <div class="card rounded-3 p-3">
                 <img src="${image}" class="card-img-top rounded-3" alt="...">
@@ -42,9 +45,15 @@ const displayData = (data, dataLimit) => {
                     <h5 class="card-title fw-bold">Features</h5>
 
                     <div class="d-flex flex-column">
-                        <small class="p-0 m-0">1. ${features[0]}</small>
-                        <small class="p-0 m-0">2. ${features[1]}</small>
-                        <small >3. ${features[2]}</small>
+                        <small class="p-0 m-0">
+                            1. ${features[0] ? features[0] : 'No data available'}
+                        </small>
+                        <small class="p-0 m-0">
+                            2. ${features[1] ? features[1] : 'No data available'}
+                        </small>
+                        <small >
+                            3. ${features[2] ? features[2] : 'No data available'}
+                        </small>
                     </div>
                     
                 </div>
@@ -62,6 +71,7 @@ const displayData = (data, dataLimit) => {
                 </div>
             </div>
         `;
+
         // adding each card to its parent container
         cardContainer.appendChild(cardDiv);
 
